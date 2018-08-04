@@ -1,0 +1,61 @@
+version: "2.0"
+
+networks:
+  elk:
+    driver: bridge
+
+services:
+  elasticsearch:
+    image: "652406827250.dkr.ecr.eu-central-1.amazonaws.com/elk/elasticsearch:6.0.0"
+    container_name: elasticsearch
+    restart: always
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      - HOST=0.0.0.0
+      - PORT=9200
+    networks:
+      - elk
+
+  kibana:
+    image: "652406827250.dkr.ecr.eu-central-1.amazonaws.com/elk/kibana:6.0.0"
+    container_name: kibana
+    restart: always
+    ports:
+      - "5601:5601"
+    links:
+      - elasticsearch
+    environment:
+      - HOST=0.0.0.0
+      - PORT=5601
+      - ES_URL=elasticsearch
+    networks:
+      - elk
+
+  nginx:
+    image: "652406827250.dkr.ecr.eu-central-1.amazonaws.com/elk/nginx:latest"
+    container_name: nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    links:
+      - kibana
+    environment:
+      - SERVER_NAME=elk.platform.celonis.cloud
+      - KIBANA_URL=kibana
+      - KIBANA_PORT=5601
+    networks:
+      - elk
+
+  logstash:
+    image: "652406827250.dkr.ecr.eu-central-1.amazonaws.com/elk/logstash:6.0.0"
+    container_name: logstash
+    restart: always
+    ports:
+      - "5443:5443"
+    links:
+      - elasticsearch
+    networks:
+      - elk
