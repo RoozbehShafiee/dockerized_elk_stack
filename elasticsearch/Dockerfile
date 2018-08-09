@@ -1,6 +1,4 @@
-## Containerized ELK Stack based on ubuntu 16.04
-
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 
 ## label and credits
 LABEL image="Dockerized ELK Stack - Elasticsearch Docker Image" \
@@ -10,12 +8,14 @@ LABEL image="Dockerized ELK Stack - Elasticsearch Docker Image" \
       reference="https://roozbeh.cloud, https://github.com/RoozbehShafiee"
 
 ## manage packages and repositories
-RUN apt update && \
-    apt -y install \
-    openjdk-8-jdk \
-    apt-transport-https \
-    ca-certificates \
-    wget
+RUN apt update \
+    && apt -y dist-upgrade \
+    && apt -y install \
+              openjdk-8-jdk \
+              apt-transport-https \
+              ca-certificates \
+              gnupg2 \
+              wget
 
 RUN wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add - \
     && echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | tee -a \
@@ -23,19 +23,17 @@ RUN wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add 
 
 RUN apt update && \
     apt -y install \
-    elasticsearch
-
-RUN rm -rf /var/lib/apt/lists/* \
+           elasticsearch \
+    && rm -rf /var/lib/apt/lists/* \
     && rm -rf /var/cache/apt/archives/*
 
 ## manage users, files, directories and permissions
-COPY ./conf_files/run.sh /
-RUN chmod +x /run.sh \
+ADD ./conf_files/entrypoint.sh /
+RUN chmod +x /entrypoint.sh \
     && usermod -s /bin/bash elasticsearch
 
 ## expose port
 EXPOSE 9200
-EXPOSE 9300
 
 ## start elasticsearch service
-CMD ["/run.sh"]
+CMD ["/entrypoint.sh"]
