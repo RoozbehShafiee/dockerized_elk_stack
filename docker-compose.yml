@@ -1,17 +1,16 @@
-version: "2.0"
-
-networks:
-  elk:
-    driver: bridge
+version: "3.5"
 
 services:
   elasticsearch:
-    image: "652406827250.dkr.ecr.eu-central-1.amazonaws.com/elk/elasticsearch:6.0.0"
+    build: ./elasticsearch
+    image: "elasticsearch:21082018"
     container_name: elasticsearch
     restart: always
-    ports:
-      - "9200:9200"
-      - "9300:9300"
+    expose:
+      - 9200
+    volumes:
+      - elasticsearch_data:/var/data/elasticsearch
+      - elasticsearch_logs:/var/log/elasticsearch
     environment:
       - HOST=0.0.0.0
       - PORT=9200
@@ -19,43 +18,62 @@ services:
       - elk
 
   kibana:
-    image: "652406827250.dkr.ecr.eu-central-1.amazonaws.com/elk/kibana:6.0.0"
+    build: ./kibana
+    image: "kibana:21082018"
     container_name: kibana
     restart: always
-    ports:
-      - "5601:5601"
-    links:
-      - elasticsearch
+    expose:
+      - 5601
     environment:
       - HOST=0.0.0.0
       - PORT=5601
-      - ES_URL=elasticsearch
-    networks:
-      - elk
-
-  nginx:
-    image: "652406827250.dkr.ecr.eu-central-1.amazonaws.com/elk/nginx:latest"
-    container_name: nginx
-    restart: always
-    ports:
-      - "80:80"
-      - "443:443"
+      - ES_HOST=elasticsearch
     links:
-      - kibana
-    environment:
-      - SERVER_NAME=elk.platform.celonis.cloud
-      - KIBANA_URL=kibana
-      - KIBANA_PORT=5601
+      - elasticsearch
     networks:
       - elk
 
   logstash:
-    image: "652406827250.dkr.ecr.eu-central-1.amazonaws.com/elk/logstash:6.0.0"
+    build: ./logstash
+    image: "logstash:21082018"
     container_name: logstash
     restart: always
-    ports:
-      - "5443:5443"
+    expose:
+      - 5443
+    environment:
+      - SUPPORT_SSL=no
+      - ES_HOST=elasticsearch
+      - ES_PORT=9200
     links:
       - elasticsearch
     networks:
       - elk
+
+  nginx:
+    build: ./nginx
+    image: "nginx:21082018"
+    container_name: nginx
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+      - FQDN=example.com
+      - SUPPORT_SSL=no
+      - KIBANA_URL=kibana
+      - KIBANA_PORT=5601
+      - ACCESS_USER=admin
+      - ACCESS_PASSWORD=myPassword
+    links:
+      - kibana
+      - logstash
+    networks:
+      - elk
+
+networks:
+  elk:
+    driver: bridge
+
+volumes:
+  elasticsearch_data:
+  elasticsearch_logs:

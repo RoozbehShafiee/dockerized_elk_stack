@@ -33,47 +33,17 @@ RUN apt update \
            logstash \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /var/cache/apt/archives/*
-#
-# # the "ffi-rzmq-core" gem is very picky about where it looks for libzmq.so
-# RUN mkdir -p /usr/local/lib \
-# 	  && ln -s /usr/lib/*/libzmq.so.3 /usr/local/lib/libzmq.so
-
-## grab gosu for easy step-down from root
-# RUN set -x \
-#   	&& wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture)" \
-#   	&& wget -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture).asc" \
-#   	&& export GNUPGHOME="$(mktemp -d)" \
-#   	&& gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 \
-#   	&& gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu \
-#   	&& rm -rf "$GNUPGHOME" /usr/local/bin/gosu.asc \
-#   	&& chmod +x /usr/local/bin/gosu \
-#   	&& gosu nobody true
-
-## generate ssl keys
-RUN mkdir /etc/logstash/ssl \
-    && openssl req -subj /CN=elk-stack -x509 -days 3650 \
-    -batch -nodes -newkey rsa:4096 -keyout \
-    /etc/logstash/ssl/logstash.key -out /etc/logstash/ssl/logstash.crt
 
 ## manage files, directories and permissions
+ADD ./conf_files/ssl /etc/logstash/
 ADD ./conf_files/filebeat-input.conf /etc/logstash/conf.d/filebeat-input.conf
 ADD ./conf_files/syslog-filter.conf /etc/logstash/conf.d/syslog-filter.conf
 ADD ./conf_files/output-elasticsearch.conf /etc/logstash/conf.d/output-elasticsearch.conf
 ADD ./conf_files/entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 
+## expose port
+EXPOSE 5443
 
-# RUN set -ex; \
-#   	if [ -f "$LS_SETTINGS_DIR/logstash.yml" ]; then \
-#   		sed -ri 's!^path\.config:!#&!g' "$LS_SETTINGS_DIR/logstash.yml"; \
-#   	fi; \
-#     # if the "log4j2.properties" file exists (logstash 5.x), let's empty it out so we get the default: "logging only errors to the console"
-#     if [ -f "$LS_SETTINGS_DIR/log4j2.properties" ]; then \
-#     	cp "$LS_SETTINGS_DIR/log4j2.properties" "$LS_SETTINGS_DIR/log4j2.properties.dist"; \
-#     	truncate --size=0 "$LS_SETTINGS_DIR/log4j2.properties"; \
-#     fi
-#
-# ## run Logstash service
-# ENTRYPOINT ["/entrypoint.sh"]
-# CMD ["-e", ""]
-CMD ["/usr/share/logstash/bin/logstash"]
+## start elasticsearch service
+CMD ["/entrypoint.sh"]
