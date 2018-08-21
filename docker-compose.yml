@@ -8,6 +8,7 @@ services:
     restart: always
     expose:
       - 9200
+      - 9300
     volumes:
       - elasticsearch_data:/var/data/elasticsearch
       - elasticsearch_logs:/var/log/elasticsearch

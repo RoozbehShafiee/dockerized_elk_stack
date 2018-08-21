@@ -33,7 +33,7 @@ RUN chmod +x /entrypoint.sh \
     && usermod -s /bin/bash elasticsearch
 
 ## expose port
-EXPOSE 9200
+EXPOSE 9200 9300
 
 ## start elasticsearch service
 CMD ["/entrypoint.sh"]
