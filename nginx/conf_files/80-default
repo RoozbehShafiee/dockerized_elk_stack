@@ -1,10 +1,10 @@
 server {
     listen 80;
 
-    server_name server-name;
+    server_name FQDN;
 
-    #auth_basic "Restricted Access";
-    #auth_basic_user_file /etc/nginx/.kibana-user;
+    auth_basic "Restricted Access";
+    auth_basic_user_file /etc/nginx/htpasswd.kibana;
 
     location / {
         proxy_pass http://kibana-url:kibana-port;
