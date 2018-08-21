@@ -17,7 +17,6 @@ RUN apt update \
     && apt -y dist-upgrade \
     && apt -y install \
               openjdk-8-jdk \
-              openssl \
               apt-transport-https \
               ca-certificates \
               libzmq5 \
