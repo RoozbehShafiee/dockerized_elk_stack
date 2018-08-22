@@ -30,10 +30,11 @@ ADD ./conf_files/nginx.conf /etc/nginx/nginx.conf
 ADD ./conf_files/sysctl.conf /etc/sysctl.d/10-ubuntu-nginx.conf
 ADD ./conf_files/kibana /etc/nginx/sites-available/kibana
 ADD ./conf_files/logstash /etc/nginx/sites-available/logstash
-ADD ./conf_files/ssl /etc/nginx/
+ADD ./conf_files/ssl /etc/nginx/ssl
 ADD ./conf_files/entrypoint.sh /
 RUN chmod +x /entrypoint.sh
-RUN rm -f /etc/nginx/sites-available/default \
+RUN chmod 600 /etc/nginx/ssl/* \
+    && rm -f /etc/nginx/sites-available/default \
     && rm -f /etc/nginx/sites-enabled/default
 
 ## forward request and error logs to docker log collector

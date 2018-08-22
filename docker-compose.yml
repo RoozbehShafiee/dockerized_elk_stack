@@ -58,10 +58,8 @@ services:
       - 443:443
       - 5443:5443
     environment:
-      - KIBANA_FQDN=kibana.example.com
       - KIBANA_URL=kibana
       - KIBANA_PORT=5601
-      - LOGSTASH_FQDN=logstash.example.com
       - LOGSTASH_URL=logstash
       - LOGSTASH_PORT=5443
       - ACCESS_USER=admin

@@ -34,12 +34,13 @@ RUN apt update \
     && rm -rf /var/cache/apt/archives/*
 
 ## manage files, directories and permissions
-ADD ./conf_files/ssl /etc/logstash/
+ADD ./conf_files/ssl /etc/logstash/ssl
 ADD ./conf_files/filebeat-input.conf /etc/logstash/conf.d/filebeat-input.conf
 ADD ./conf_files/syslog-filter.conf /etc/logstash/conf.d/syslog-filter.conf
 ADD ./conf_files/output-elasticsearch.conf /etc/logstash/conf.d/output-elasticsearch.conf
 ADD ./conf_files/entrypoint.sh /
-RUN chmod +x /entrypoint.sh
+RUN chmod +x /entrypoint.sh \
+    && chmod 600 /etc/logstash/ssl/*
 
 ## expose port
 EXPOSE 5443
