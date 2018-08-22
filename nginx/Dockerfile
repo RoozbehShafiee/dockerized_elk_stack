@@ -28,8 +28,9 @@ RUN apt-get update \
 ## manage files, directories and permissions
 ADD ./conf_files/nginx.conf /etc/nginx/nginx.conf
 ADD ./conf_files/sysctl.conf /etc/sysctl.d/10-ubuntu-nginx.conf
-ADD ./conf_files/80-default /etc/nginx/sites-available/80-default
-ADD ./conf_files/443-default /etc/nginx/sites-available/443-default
+ADD ./conf_files/kibana /etc/nginx/sites-available/kibana
+ADD ./conf_files/logstash /etc/nginx/sites-available/logstash
+ADD ./conf_files/ssl /etc/nginx/
 ADD ./conf_files/entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 RUN rm -f /etc/nginx/sites-available/default \
@@ -40,8 +41,7 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log
 
 ## expose ports
-EXPOSE 80
-EXPOSE 443
+EXPOSE 443 5443
 
 STOPSIGNAL SIGTERM
 

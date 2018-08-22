@@ -42,7 +42,6 @@ services:
     expose:
       - 5443
     environment:
-      - SUPPORT_SSL=no
       - ES_HOST=elasticsearch
       - ES_PORT=9200
     links:
@@ -59,10 +58,12 @@ services:
       - 80:80
       - 443:443
     environment:
-      - FQDN=example.com
-      - SUPPORT_SSL=no
+      - KIBANA_FQDN=kibana.example.com
       - KIBANA_URL=kibana
       - KIBANA_PORT=5601
+      - LOGSTASH_FQDN=logstash.example.com
+      - LOGSTASH_URL=logstash
+      - LOGSTASH_PORT=5443
       - ACCESS_USER=admin
       - ACCESS_PASSWORD=myPassword
     links:
