@@ -8,10 +8,7 @@ LABEL image="Dockerized ELK Stack - NGINX reverse proxy Docker Image" \
       reference="https://roozbeh.cloud, https://github.com/RoozbehShafiee"
 
 ## environment variables
-ENV BRANCH=stable \
-    HOME=/root \
-    DEBIAN_FRONTEND=noninteractive \
-    DATA_DIR=/data
+ENV BRANCH=stable
 
 ## manage packages and repositories
 RUN apt-get update \
@@ -46,5 +43,5 @@ EXPOSE 443 5443
 
 STOPSIGNAL SIGTERM
 
-## run NGINX
+## start nginx service
 CMD ["/entrypoint.sh"]

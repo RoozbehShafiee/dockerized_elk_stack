@@ -31,7 +31,7 @@ RUN apt update && \
 ADD ./conf_files/entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 
-## expose port
+## expose ports
 EXPOSE 5601
 
 ## start kibana service

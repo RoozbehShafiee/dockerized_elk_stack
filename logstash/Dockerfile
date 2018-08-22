@@ -7,11 +7,6 @@ LABEL image="Dockerized ELK Stack - Logstash Docker Image" \
       released="August 4th, 2018" \
       reference="https://roozbeh.cloud, https://github.com/RoozbehShafiee"
 
-## set environment variables
-ENV GOSU_VERSION=1.10 \
-    PATH=/usr/share/logstash/bin:$PATH \
-    LS_SETTINGS_DIR=/etc/logstash
-
 ## manage packages and repositories
 RUN apt update \
     && apt -y dist-upgrade \
@@ -42,8 +37,8 @@ ADD ./conf_files/entrypoint.sh /
 RUN chmod +x /entrypoint.sh \
     && chmod 600 /etc/logstash/ssl/*
 
-## expose port
+## expose ports
 EXPOSE 5443
 
-## start elasticsearch service
+## start logstash service
 CMD ["/entrypoint.sh"]

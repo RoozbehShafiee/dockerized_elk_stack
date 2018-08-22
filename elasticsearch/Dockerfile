@@ -27,12 +27,12 @@ RUN apt update && \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /var/cache/apt/archives/*
 
-## manage users, files, directories and permissions
+## manage files, directories and permissions
 ADD ./conf_files/entrypoint.sh /
 RUN chmod +x /entrypoint.sh \
     && usermod -s /bin/bash elasticsearch
 
-## expose port
+## expose ports
 EXPOSE 9200 9300
 
 ## start elasticsearch service
