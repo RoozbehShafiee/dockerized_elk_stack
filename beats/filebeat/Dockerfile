@@ -33,5 +33,5 @@ ADD ./conf_files/filebeat.reference.yml /etc/filebeat/filebeat.reference.yml
 ADD ./conf_files/entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 
-## start elasticsearch service
+## start filebeat service
 CMD ["/entrypoint.sh"]
