@@ -30,8 +30,6 @@ RUN apt-get update && \
 ADD ./conf_files/ssl /etc/filebeat/ssl
 ADD ./conf_files/filebeat.yml /etc/filebeat/filebeat.yml
 ADD ./conf_files/filebeat.reference.yml /etc/filebeat/filebeat.reference.yml
-ADD ./conf_files/entrypoint.sh /
-RUN chmod +x /entrypoint.sh
 
 ## start filebeat service
-CMD ["/entrypoint.sh"]
+CMD ["/usr/share/filebeat/bin/filebeat", "-c", "/etc/filebeat/filebeat.yml"]

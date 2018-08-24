@@ -9,8 +9,8 @@ services:
     # volumes:
     #   - elasticsearch_data:/var/data/elasticsearch
     #   - elasticsearch_logs:/var/log/elasticsearch
-    environment:
-      - LOGSTASH_IPADDR=
+    extra_hosts:
+      - "logstash:123.456.78.9"
     networks:
       - elk_beats
 
