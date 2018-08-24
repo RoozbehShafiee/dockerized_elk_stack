@@ -25,8 +25,7 @@ filebeat.inputs:
 
   # Paths that should be crawled and fetched. Glob based paths.
   paths:
-    - /var/log/auth.log
-    - /var/log/syslog
+    - /var/log/dpkg.log
 
   # Exclude lines. A list of regular expressions to match. It drops the lines that are
   # matching any regular expression from the list.
@@ -152,7 +151,7 @@ setup.kibana:
 #----------------------------- Logstash output --------------------------------
 output.logstash:
   # The Logstash hosts
-  hosts: ["logstash-endpoint:5443"]
+  hosts: ["logstash:5443"]
 
   # Optional SSL. By default is off.
   # List of root certificates for HTTPS server verifications

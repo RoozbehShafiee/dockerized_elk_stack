@@ -38,7 +38,7 @@ services:
     build: ./logstash
     image: "logstash:21082018"
     container_name: logstash
-    # restart: always
+    restart: always
     expose:
       - 5443
     environment:

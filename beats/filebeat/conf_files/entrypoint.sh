@@ -3,11 +3,10 @@
 set -m
 set -e
 
-LOGSTASH_ENDPOINT=${LOGSTASH_ENDPOINT:-}
-PORT=${PORT:-}
+LOGSTASH_IPADDR=${LOGSTASH_IPADDR:-}
 
 function config_filebeat {
-    sed -i "s|logstash-endpoint|${LOGSTASH_ENDPOINT}|g" /etc/filebeat/filebeat.yml
+    echo "${LOGSTASH_IPADDR}  logstash >> /etc/hosts"
 }
 
 function run_filebeat {
