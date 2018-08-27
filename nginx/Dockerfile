@@ -26,13 +26,10 @@ RUN apt-get update \
 ADD ./conf_files/nginx.conf /etc/nginx/nginx.conf
 ADD ./conf_files/sysctl.conf /etc/sysctl.d/10-ubuntu-nginx.conf
 ADD ./conf_files/kibana /etc/nginx/sites-available/kibana
-ADD ./conf_files/logstash /etc/nginx/sites-available/logstash
 ADD ./conf_files/ssl/kibana /etc/nginx/ssl/kibana
-ADD ./conf_files/ssl/logstash /etc/nginx/ssl/logstash
 ADD ./conf_files/entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 RUN chmod 600 /etc/nginx/ssl/kibana/* \
-    && chmod 600 /etc/nginx/ssl/logstash/* \
     && rm -f /etc/nginx/sites-available/default \
     && rm -f /etc/nginx/sites-enabled/default
 
