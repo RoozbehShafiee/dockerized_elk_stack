@@ -39,7 +39,7 @@ services:
     image: "logstash:21082018"
     container_name: logstash
     # restart: always
-    expose:
+    ports:
       - 5443
     environment:
       - ES_HOST=elasticsearch
