@@ -12,7 +12,7 @@ function config_logstash {
 }
 
 function run_logstash {
-    /usr/share/logstash/bin/logstash
+    /usr/share/logstash/bin/logstash --path.settings /etc/logstash/
 }
 
 config_logstash

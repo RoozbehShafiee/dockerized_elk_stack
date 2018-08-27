@@ -1,7 +1,7 @@
 FROM ubuntu:18.04
 
 ## label and credits
-LABEL image="Dockerized ELK Stack - Elasticsearch Docker Image" \
+LABEL image="Dockerized ELK Stack - Filebeat Docker Image" \
       maintainer="Roozbeh Shafiee, me@roozbeh.cloud" \
       version="1.0.0-production" \
       released="August 4th, 2018" \
@@ -11,7 +11,6 @@ LABEL image="Dockerized ELK Stack - Elasticsearch Docker Image" \
 RUN apt-get update \
     && apt-get -y dist-upgrade \
     && apt-get -y install \
-                  openjdk-8-jdk \
                   apt-transport-https \
                   ca-certificates \
                   gnupg2 \
@@ -23,17 +22,14 @@ RUN wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add 
 
 RUN apt-get update && \
     apt-get -y install \
-               elasticsearch \
+               filebeat \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /var/cache/apt/archives/*
 
 ## manage files, directories and permissions
-ADD ./conf_files/entrypoint.sh /
-RUN chmod +x /entrypoint.sh \
-    && usermod -s /bin/bash elasticsearch
+ADD ./conf_files/ssl /etc/filebeat/ssl
+ADD ./conf_files/filebeat.yml /etc/filebeat/filebeat.yml
+ADD ./conf_files/filebeat.reference.yml /etc/filebeat/filebeat.reference.yml
 
-## expose ports
-EXPOSE 9200 9300
-
-## start elasticsearch service
-CMD ["/entrypoint.sh"]
+## start filebeat service
+CMD ["/usr/share/filebeat/bin/filebeat", "-c", "/etc/filebeat/filebeat.yml"]
