@@ -3,21 +3,17 @@ version: "3.5"
 services:
   filebeat:
     build: ./filebeat
-    image: "filebeat:21082018"
+    image: "filebeat:27082018"
     container_name: filebeat
+    hostname: filebeat
     restart: always
-    # volumes:
-    #   - elasticsearch_data:/var/data/elasticsearch
-    #   - elasticsearch_logs:/var/log/elasticsearch
+    volumes:
+      - /path/to/logs:/logs
     extra_hosts:
-      - "logstash:123.456.78.9"
+      - "logstash:123.45.67.89"
     networks:
       - elk_beats
 
 networks:
   elk_beats:
     driver: bridge
-#
-# volumes:
-#   elasticsearch_data:
-#   elasticsearch_logs:

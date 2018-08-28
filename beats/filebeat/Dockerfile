@@ -31,5 +31,7 @@ ADD ./conf_files/ssl /etc/filebeat/ssl
 ADD ./conf_files/filebeat.yml /etc/filebeat/filebeat.yml
 ADD ./conf_files/filebeat.reference.yml /etc/filebeat/filebeat.reference.yml
 
+VOLUME ["/logs"]
+
 ## start filebeat service
 CMD ["/usr/share/filebeat/bin/filebeat", "-c", "/etc/filebeat/filebeat.yml"]

@@ -3,8 +3,9 @@ version: "3.5"
 services:
   elasticsearch:
     build: ./elasticsearch
-    image: "elasticsearch:21082018"
+    image: "elasticsearch:27082018"
     container_name: elasticsearch
+    hostname: elasticsearch
     restart: always
     expose:
       - 9200
@@ -20,8 +21,9 @@ services:
 
   kibana:
     build: ./kibana
-    image: "kibana:21082018"
+    image: "kibana:27082018"
     container_name: kibana
+    hostname: kibana
     restart: always
     expose:
       - 5601
@@ -36,8 +38,9 @@ services:
 
   logstash:
     build: ./logstash
-    image: "logstash:21082018"
+    image: "logstash:27082018"
     container_name: logstash
+    hostname: logstash
     restart: always
     ports:
       - 5443
@@ -51,12 +54,12 @@ services:
 
   nginx:
     build: ./nginx
-    image: "nginx:21082018"
+    image: "nginx:27082018"
     container_name: nginx
+    hostname: nginx
     restart: always
     ports:
       - 443:443
-      - 5443:5443
     environment:
       - KIBANA_URL=kibana
       - KIBANA_PORT=5601
