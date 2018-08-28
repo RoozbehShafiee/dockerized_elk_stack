@@ -30,6 +30,7 @@ RUN apt-get update && \
 ADD ./conf_files/ssl /etc/filebeat/ssl
 ADD ./conf_files/filebeat.yml /etc/filebeat/filebeat.yml
 ADD ./conf_files/filebeat.reference.yml /etc/filebeat/filebeat.reference.yml
+RUN echo "alias logstash-connectivity='filebeat -c /etc/filebeat/filebeat.yml -e -d '*''" >> /root/.bashrc
 
 VOLUME ["/logs"]
 
