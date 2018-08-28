@@ -32,6 +32,7 @@ ADD ./conf_files/filebeat.yml /etc/filebeat/filebeat.yml
 ADD ./conf_files/filebeat.reference.yml /etc/filebeat/filebeat.reference.yml
 RUN echo "alias logstash-connectivity='filebeat -c /etc/filebeat/filebeat.yml -e -d '*''" >> /root/.bashrc
 
+## container volume
 VOLUME ["/logs"]
 
 ## start filebeat service
